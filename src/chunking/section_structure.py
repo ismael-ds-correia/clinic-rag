@@ -14,6 +14,7 @@ class Section:
     start_page: Optional[int] = None
     end_page: Optional[int] = None
     absorbed_sections: List[str] = field(default_factory=list)
+    absorbed_section_titles: List[str] = field(default_factory=list)
 
 @dataclass
 class DocumentSections:
@@ -26,11 +27,6 @@ class DocumentSections:
         self.sections.append(section)
     
     def merge_small_sections(self, min_chars: int = 750) -> None:
-        """Mescla seções menores que min_chars na seção válida anterior.
-        
-        Args:
-            min_chars: Limite mínimo de caracteres para seções independentes.
-        """
         if len(self.sections) <= 1:
             return
         
@@ -42,14 +38,25 @@ class DocumentSections:
             
             # Verifica se a seção atual é muito pequena
             if len(current.content) < min_chars and merged_sections:
-                # Mescla na seção anterior
+                # Mescla na seção anterior (backward merge)
                 previous = merged_sections[-1]
-                previous.content += current.content
                 previous.absorbed_sections.append(current.numbering)
+                previous.absorbed_section_titles.append(current.title)
                 
                 # Atualiza end_page se a atual tiver
                 if current.end_page is not None:
                     previous.end_page = current.end_page
+            elif len(current.content) < min_chars and not merged_sections:
+                # Primeira seção pequena: absorve a próxima seção (forward merge)
+                if i + 1 < len(self.sections):
+                    next_section = self.sections[i + 1]
+                    current.content += "\n" + next_section.content
+                    current.absorbed_sections.append(next_section.numbering)
+                    current.absorbed_section_titles.append(next_section.title)
+                    if next_section.end_page is not None:
+                        current.end_page = next_section.end_page
+                    i += 1  # Pula a próxima seção já absorvida
+                merged_sections.append(current)
             else:
                 # Mantém a seção como está
                 merged_sections.append(current)

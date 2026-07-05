@@ -24,7 +24,7 @@ class SectionDetector:
     
     # Padrão para enumeração de seção: um ou mais números separados por pontos, opcionalmente terminando com ponto
     # Exemplos: 1., 2.1, 3.4.2, 5.2.3.1
-    ENUMERATION_PATTERN = r'\n(\d+(?:\.\d+)*\.?)\s+([^\n]+)\n'
+    ENUMERATION_PATTERN = r'\n(\d+(?:\.\d+)*\.?)\s+([A-Z][^\n]+)\n'
     
     def __init__(self):
         """Inicializa o detector de seções."""

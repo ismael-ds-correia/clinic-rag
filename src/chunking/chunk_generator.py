@@ -12,7 +12,7 @@ class FinalChunk:
     source: str
     section_number: str
     level: int
-    title: str
+    section_titles: List[str]
     text: str
     page_start: int
     page_end: int
@@ -81,17 +81,19 @@ class FinalChunkGenerator:
             "document_type": "PCDT"
         }
         
-        # Opcional: hierarchy_path se disponível
         if 'hierarchy_path' in section_data:
             metadata['hierarchy_path'] = section_data['hierarchy_path']
         
+        section_titles = [section_data['title']]
+        if 'absorbed_section_titles' in section_data:
+            section_titles.extend(section_data['absorbed_section_titles'])
+
         chunk = {
             "chunk_id": chunk_id,
             "source": source,
             "section_number": section_number,
-            "level": section_data['level'],
-            "title": section_data['title'],
-            "text": section_data['content'],  # SEM modificação de texto
+            "section_titles": section_titles,
+            "text": section_data['content'].replace('\n', ' '),
             "page_start": section_data['start_page'],
             "page_end": section_data['end_page'],
             "metadata": metadata
@@ -119,13 +121,16 @@ class FinalChunkGenerator:
                 "document_type": "PCDT"
             }
             
+            section_titles = [section.title]
+            if section.absorbed_section_titles:
+                section_titles.extend(section.absorbed_section_titles)
+
             chunk = {
                 "chunk_id": chunk_id,
                 "source": doc_sections.source,
                 "section_number": section_number,
-                "level": section.level,
-                "title": section.title,
-                "text": section.content,
+                "section_titles": section_titles,
+                "text": section.content.replace('\n', ' '),
                 "page_start": section.start_page,
                 "page_end": section.end_page,
                 "metadata": metadata
