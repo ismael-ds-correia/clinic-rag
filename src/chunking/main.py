@@ -8,6 +8,7 @@ from section_detector import SectionDetector
 from section_structure import DocumentSections
 from chunk_generator import FinalChunkGenerator
 from typing import Union, Optional
+from semantic_enricher import SemanticEnricher, SemanticEnricherConfig
 
 def main(
     jsonl_path: Union[str, Path],
@@ -31,7 +32,8 @@ def main(
     reader = JSONLReader(jsonl_path)
     reconstructor = DocumentReconstructor()
     detector = SectionDetector()
-    chunk_generator = FinalChunkGenerator(None)  # temp_dir not needed anymore
+    enricher = SemanticEnricher()
+    chunk_generator = FinalChunkGenerator(None)
     
     # Read and group documents
     print("\nLendo e agrupando documentos...")
@@ -40,6 +42,7 @@ def main(
     
     # Accumulate all chunks in memory
     all_chunks = []
+    all_document_sections = []
     
     # Process each document
     for idx, (source, pages) in enumerate(grouped_docs.items(), 1):
@@ -62,12 +65,33 @@ def main(
         # Merge small sections (< 750 characters)
         doc_sections.merge_small_sections(min_chars=750)
         print(f"  Seções após fusão: {len(doc_sections.sections)}")
-        
-        # Convert sections to chunks directly in memory
+        all_document_sections.append(doc_sections)
+    
+    # Enriquecimento semântico em batch com IDF global
+    print("\nEnriquecendo seções semanticamente...")
+    all_sections_contents = []
+    section_mapping = []  # (doc_idx, section_idx)
+
+    for doc_idx, doc_sections in enumerate(all_document_sections):
+        for sec_idx, section in enumerate(doc_sections.sections):
+            all_sections_contents.append(section.content)
+            section_mapping.append((doc_idx, sec_idx))
+
+    # Processar em batch
+    all_entities, _ = enricher.enrich_sections_batch(all_sections_contents)
+
+    # Adicionar entidades às seções
+    for (doc_idx, sec_idx), entities in zip(section_mapping, all_entities):
+        all_document_sections[doc_idx].sections[sec_idx].semantic_entities = entities
+
+    print("Enriquecimento semântico concluído.")
+
+    print("\nGerando chunks finais...")
+    for doc_sections in all_document_sections:
         chunks = chunk_generator.document_sections_to_chunks(doc_sections)
         all_chunks.extend(chunks)
-        print(f"  Chunks gerados: {len(chunks)}")
-    
+        print(f"  Chunks gerados para {doc_sections.source}: {len(chunks)}")
+
     # Salva todos os chunks no arquivo JSONL
     print(f"\nSalvando {len(all_chunks)} chunks em: {chunks_output_path}")
     chunks_output_path = Path(chunks_output_path)

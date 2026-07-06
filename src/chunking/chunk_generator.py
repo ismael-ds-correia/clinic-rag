@@ -121,6 +121,9 @@ class FinalChunkGenerator:
                 "document_type": "PCDT"
             }
             
+            if section.semantic_entities:
+                metadata["semantic_entities"] = section.semantic_entities
+
             section_titles = [section.title]
             if section.absorbed_section_titles:
                 section_titles.extend(section.absorbed_section_titles)

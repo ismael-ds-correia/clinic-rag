@@ -15,6 +15,7 @@ class Section:
     end_page: Optional[int] = None
     absorbed_sections: List[str] = field(default_factory=list)
     absorbed_section_titles: List[str] = field(default_factory=list)
+    semantic_entities: List[str] = field(default_factory=list)
 
 @dataclass
 class DocumentSections:
