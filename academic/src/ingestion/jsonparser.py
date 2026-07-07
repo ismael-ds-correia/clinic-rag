@@ -22,6 +22,7 @@ Birth date: {resource.get("birthDate", "Unknown")}
 """.strip(),
 
         "metadata": {
+            "type": "Synthea FHIR",
             "resource_type": "Patient",
             "patient_id": resource.get("id"),
         }
@@ -54,6 +55,7 @@ Recorded: {resource.get("recordedDate", "Unknown")}
 """.strip(),
 
         "metadata": {
+            "type": "Synthea FHIR",
             "resource_type": "Condition",
             "patient_id": (
                 resource.get("subject", {})
@@ -87,6 +89,7 @@ Date: {resource.get("effectiveDateTime", "Unknown")}
 """.strip(),
 
         "metadata": {
+            "type": "Synthea FHIR",
             "resource_type": "Observation",
             "patient_id": (
                 resource.get("subject", {})
@@ -117,6 +120,7 @@ Authored: {resource.get("authoredOn", "Unknown")}
 """.strip(),
 
         "metadata": {
+            "type": "Synthea FHIR",
             "resource_type": "MedicationRequest",
             "patient_id": (
                 resource.get("subject", {})
@@ -149,6 +153,7 @@ End: {period.get("end", "Unknown")}
 """.strip(),
 
         "metadata": {
+            "type": "Synthea FHIR",
             "resource_type": "Encounter",
             "patient_id": (
                 resource.get("subject", {})
