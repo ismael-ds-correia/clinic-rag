@@ -1,14 +1,14 @@
 """Script principal de orquestração para detecção de seções e pipeline de chunking final."""
-from pathlib import Path
-import json
 
-from jsonl_reader import JSONLReader
-from document_reconstructor import DocumentReconstructor
-from section_detector import SectionDetector
-from section_structure import DocumentSections
-from chunk_generator import FinalChunkGenerator
+from pathlib import Path
+from .io.jsonl_reader import JSONLReader
+from .io.document_reconstructor import DocumentReconstructor
+from .sections.section_detector import SectionDetector
+from .sections.section_structure import DocumentSections
+from .chunks.chunk_generator import FinalChunkGenerator
+from .semantic import SemanticEnricher, SemanticEnricherConfig
 from typing import Union, Optional
-from semantic_enricher import SemanticEnricher, SemanticEnricherConfig
+import json
 
 def main(
     jsonl_path: Union[str, Path],
@@ -107,8 +107,8 @@ def main(
 
 
 if __name__ == "__main__":
-    JSONL_PATH = "../data/processed/documents.jsonl"
-    CHUNKS_OUTPUT_PATH = "../data/chunks/chunks.jsonl"
+    JSONL_PATH = "academic/data/processed/documents.jsonl"
+    CHUNKS_OUTPUT_PATH = "academic/data/chunks/chunks.jsonl"
     MAX_SOURCES = None  # Alterar para None irá processar todos os documentos
     
     main(
