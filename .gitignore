@@ -6,6 +6,7 @@ __pycache__/
 env/
 venv/
 .env
+.devinignore
 
 # --- Jupyter Notebooks ---
 .ipynb_checkpoints/

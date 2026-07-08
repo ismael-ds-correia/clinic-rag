@@ -6,8 +6,8 @@ import unicodedata
 from langchain_community.document_loaders import PyPDFLoader
 
 
-RAW_FOLDER = Path("../data/raw/pdfs/PCDT")
-OUTPUT_FILE = Path("../data/processed/documents.jsonl")
+RAW_FOLDER = Path(__file__).resolve().parents[2] / "data" / "raw" / "pdfs" / "PCDT"
+OUTPUT_FILE = Path(__file__).resolve().parents[2] / "data" / "processed" / "documents.jsonl"
 
 
 SECTION_HEADERS = [
@@ -23,7 +23,9 @@ SECTION_HEADERS = [
 
 REFERENCE_HEADERS = [
     "REFERENCIAS",
+    "REFERÊNCIAS",
     "REFERENCIAS BIBLIOGRAFICAS",
+    "REFERÊNCIAS BIBLIOGRÁFICAS",
     "BIBLIOGRAFIA"
 ]
 
@@ -34,11 +36,11 @@ def normalize_text(text: str) -> str:
     text = text.replace("\x00", " ")
 
     # Remove acentos e cedilha
-    text = unicodedata.normalize("NFD", text)
-    text = "".join(
-        c for c in text
-        if unicodedata.category(c) != "Mn"
-    )
+    #text = unicodedata.normalize("NFD", text)
+    #text = "".join(
+    #    c for c in text
+    #    if unicodedata.category(c) != "Mn"
+    #)
 
     # Remove excesso de espaços
     text = re.sub(r"[ \t]+", " ", text)
@@ -59,7 +61,7 @@ def infer_document_type(pages) -> str:
 
 def is_reference_header(line: str) -> bool:
     return re.fullmatch(
-        r"\s*(\d+\s*\.?)?\s*REFERENCIAS(\s+BIBLIOGRAFICAS)?\s*",
+        r"\s*(\d+\s*\.?)?\s*(REFERENCIAS|REFERÊNCIAS)(\s+BIBLIOGRAFICAS)?\s*",
         line,
         flags=re.IGNORECASE
     ) is not None
@@ -103,7 +105,7 @@ def remove_references(document):
     return document
 
 
-# ------------------------------------------------------------------
+# main
 
 OUTPUT_FILE.parent.mkdir(parents=True, exist_ok=True)
 OUTPUT_FILE.write_text("", encoding="utf-8")
@@ -129,9 +131,7 @@ with OUTPUT_FILE.open("a", encoding="utf-8") as f:
 
         document_type = infer_document_type(pages)
 
-        # -----------------------------
         # Cria uma representação do PDF
-        # -----------------------------
 
         document = []
 
