@@ -6,14 +6,12 @@ services:
       dockerfile: docker/Dockerfile
     
     ports:
-      - "8888:8888"
       - "8501:8501"
     
     volumes:
       - ../academic:/app/academic
     
     environment:
-      - JUPYTER_ENABLE_LAB=yes
       - NVIDIA_VISIBLE_DEVICES=all
     
     deploy:
@@ -23,3 +21,5 @@ services:
             - driver: nvidia
               count: 1
               capabilities: [gpu, compute, utility]
+    tty: true
+    stdin_open: true

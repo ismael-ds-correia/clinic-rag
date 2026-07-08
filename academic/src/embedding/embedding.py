@@ -85,8 +85,9 @@ class DataEmbedding:
             for i in tqdm(range(0, len(chunks), batch_size)):
                 batch = chunks[i:i + batch_size]
                 texts = [
-                    f'Documento: {item.get("source", "")}. ' 
+                    f'Documento: {item.get("source", "Desconhecido")}. ' 
                     f'Seções: {" - ".join(item.get("section_titles", []))}. ' 
+                    f'Entidades: {"; ".join(item.get("section_entities", []))}. ' 
                     f'Conteúdo: {item.get("text", "")}' 
                     for item in batch
                 ]
@@ -94,6 +95,9 @@ class DataEmbedding:
                 vectors = self.embedding_model.embed_documents(texts)
                 
                 for j, item in enumerate(batch):
+                    original_source = item.get("source", "")
+                    item["source"] = Path(original_source).stem
+
                     item["embedding"] = vectors[j]
                     out_f.write(json.dumps(item, ensure_ascii=False) + "\n")
         
