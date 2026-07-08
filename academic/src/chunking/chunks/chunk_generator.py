@@ -4,6 +4,7 @@ from pathlib import Path
 from typing import List, Union, Dict, Any
 from dataclasses import dataclass
 from ..sections.section_structure import DocumentSections
+import re
 
 @dataclass
 class FinalChunk:
@@ -93,7 +94,7 @@ class FinalChunkGenerator:
             "source": source,
             "section_number": section_number,
             "section_titles": section_titles,
-            "text": section_data['content'].replace('\n', ' '),
+            "text": clean_text(section_data['content'].replace('\n', ' ')),
             "page_start": section_data['start_page'],
             "page_end": section_data['end_page'],
             "metadata": metadata
@@ -133,7 +134,7 @@ class FinalChunkGenerator:
                 "source": doc_sections.source,
                 "section_number": section_number,
                 "section_titles": section_titles,
-                "text": section.content.replace('\n', ' '),
+                "text": clean_text(section.content.replace('\n', ' ')),
                 "page_start": section.start_page,
                 "page_end": section.end_page,
                 "metadata": metadata
@@ -142,4 +143,28 @@ class FinalChunkGenerator:
             chunks.append(chunk)
         
         return chunks
-        
+
+def clean_text(text: str) -> str:
+    """Remove caracteres e padrões indesejados do texto.
+    
+    Remove:
+    - ● (bullet points)
+    - ______ (underscores repetidos)
+    - " (aspas)
+    - ..... (pontos repetidos)
+    """
+    import re
+    
+    # Remove bullet points
+    text = text.replace('●', '')
+    
+    # Remove underscores repetidos (3 ou mais)
+    text = re.sub(r'_{3,}', '', text)
+    
+    # Remove aspas
+    text = text.replace('"', '')
+    
+    # Remove pontos repetidos (3 ou mais)
+    text = re.sub(r'\.{3,}', '', text)
+    
+    return text
