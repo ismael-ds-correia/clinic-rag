@@ -1,14 +1,4 @@
 # ================================
-# Ambiente Jupyter
-# ================================
-jupyterlab==4.1.5
-jupyterlab-lsp
-python-lsp-server
-catppuccin-jupyterlab
-ipywidgets
-httpx<0.28.0 
-
-# ================================
 # Coleta de dados
 # ================================
 requests           
@@ -33,7 +23,7 @@ sentence-transformers
 # ================================
 # Base vetorial local
 # ================================
-chromadb
+faiss-cpu
 
 # ================================
 # Interface
