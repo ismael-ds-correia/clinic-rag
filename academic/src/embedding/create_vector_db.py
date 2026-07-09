@@ -3,55 +3,49 @@ from pathlib import Path
 
 import faiss
 import numpy as np
-from sentence_transformers import SentenceTransformer
 
 
 BASE_DIR = Path(__file__).resolve().parents[2]
 
-CHUNKS_PATH = BASE_DIR / "data" / "chunks" / "chunks.jsonl"
+EMBEDDINGS_PATH = BASE_DIR / "data" / "embeddings" / "embeddings.jsonl"
 OUTPUT_DIR = BASE_DIR / "data" / "embeddings"
 
 INDEX_PATH = OUTPUT_DIR / "index.faiss"
-METADATA_PATH = OUTPUT_DIR / "metadata.json"
+METADATA_PATH = OUTPUT_DIR / "metadata.jsonl"
 
 
-def load_chunks():
-    chunks = []
+def load_embeddings():
+    embeddings = []
 
-    with open(CHUNKS_PATH, "r", encoding="utf-8") as file:
+    with open(EMBEDDINGS_PATH, "r", encoding="utf-8") as file:
         for line in file:
             item = json.loads(line)
-            chunks.append(item)
+            embeddings.append(item)
 
-    return chunks
+    return embeddings
 
 
 def main():
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
-    chunks = load_chunks()
+    embeddings = load_embeddings()
 
-    texts = [chunk["text"] for chunk in chunks]
+    print(f"Carregando {len(embeddings)} embeddings pré-calculados...")
 
-    model = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
+    vectors = np.array([item["embedding"] for item in embeddings], dtype=np.float32)
+    metadata = [{key: value for key, value in item.items() if key != "embedding"} 
+    for item in embeddings]
 
-    embeddings = model.encode(
-        texts,
-        convert_to_numpy=True,
-        show_progress_bar=True
-    )
+    faiss.normalize_L2(vectors)
 
-    embeddings = embeddings.astype("float32")
-
-    dimension = embeddings.shape[1]
-
-    index = faiss.IndexFlatL2(dimension)
-    index.add(embeddings)
+    index = faiss.IndexFlatIP(vectors.shape[1])
+    index.add(vectors)
 
     faiss.write_index(index, str(INDEX_PATH))
 
     with open(METADATA_PATH, "w", encoding="utf-8") as file:
-        json.dump(chunks, file, ensure_ascii=False, indent=2)
+        for item in metadata:
+            file.write(json.dumps(item, ensure_ascii=False) + "\n")
 
     print("Base vetorial criada com sucesso!")
     print(f"Índice FAISS: {INDEX_PATH}")

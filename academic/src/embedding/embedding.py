@@ -1,6 +1,6 @@
 """This module contains the embeddings classes for the academic project."""
 
-from langchain_huggingface import HuggingFaceEmbeddings
+from langchain_ollama import OllamaEmbeddings
 from util.logger import setup_logger
 from typing import List, Dict, Any
 from pathlib import Path
@@ -39,18 +39,14 @@ class DataEmbedding:
 
     def _initialize_embedding_model(self) -> None:
         """
-        Initializes the embedding model on the GPU.
+        Initializes the embedding model bge-m3 via Ollama.
         """
         if self.embedding_model is not None:
             return
         
-        logger.info("Initializing the embedding model on CUDA...")
+        logger.info("Initializing the embedding model via Ollama...")
         try:
-            self.embedding_model = HuggingFaceEmbeddings(
-                model_name="BAAI/bge-m3",
-                model_kwargs={"device": "cuda"},
-                encode_kwargs={"normalize_embeddings": True}
-            )
+            self.embedding_model = OllamaEmbeddings(model="bge-m3")
             logger.info("Embedding model initialized successfully!")
         except Exception as error:
             logger.error(f"Failed to initialize the embedding model: {error}")
