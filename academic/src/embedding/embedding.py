@@ -87,7 +87,7 @@ class DataEmbedding:
                 texts = [
                     f'Documento: {item.get("source", "Desconhecido")}. ' 
                     f'Seções: {" - ".join(item.get("section_titles", []))}. ' 
-                    f'Entidades: {"; ".join(item.get("section_entities", []))}. ' 
+                    f'Entidades: {"; ".join(item.get("semantic_entities", []))}. ' 
                     f'Conteúdo: {item.get("text", "")}' 
                     for item in batch
                 ]
