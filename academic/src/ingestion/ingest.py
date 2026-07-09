@@ -11,15 +11,7 @@ DATASETS = [
         "input": Path(__file__).resolve().parents[2] / "data" / "raw" / "pdfs" / "PCDT",
         "output": Path(__file__).resolve().parents[2] / "data" / "processed" / "pcdt.jsonl"
     },
-    {
-        "type": "BULA",
-        "input": Path(__file__).resolve().parents[2] / "data" / "raw" / "pdfs" / "bulas",
-        "output": Path(__file__).resolve().parents[2] / "data" / "processed" / "bulas.jsonl"
-    }
 ]
-
-RAW_FOLDER = Path(__file__).resolve().parents[2] / "data" / "raw" / "pdfs" / "bulas"
-OUTPUT_FILE = Path(__file__).resolve().parents[2] / "data" / "processed" / "bulas.jsonl"
 
 PCDT_SECTION_HEADERS = [
     "ANEXO",
