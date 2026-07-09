@@ -10,6 +10,6 @@ RUN pip install --no-cache-dir -r /scripts/requirements.txt
 COPY ./docker/scripts/entrypoint.sh /scripts/entrypoint.sh
 RUN chmod +x /scripts/entrypoint.sh
 
-EXPOSE 8888
+EXPOSE 8501
 
 ENTRYPOINT [ "sh", "/scripts/entrypoint.sh" ]

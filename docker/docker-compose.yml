@@ -4,22 +4,18 @@ services:
     build:
       context: ../
       dockerfile: docker/Dockerfile
-    
     ports:
       - "8501:8501"
-    
     volumes:
       - ../academic:/app/academic
-    
-    environment:
-      - NVIDIA_VISIBLE_DEVICES=all
-    
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              count: 1
-              capabilities: [gpu, compute, utility]
-    tty: true
-    stdin_open: true
+
+  ollama:
+    image: ollama/ollama
+    container_name: ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+
+volumes:
+  ollama_data:
