@@ -15,12 +15,6 @@ langchain-ollama
 langgraph
 
 # ================================
-# Modelos de IA e Embeddings
-# ================================
-langchain-huggingface
-sentence-transformers
-
-# ================================
 # Base vetorial local
 # ================================
 faiss-cpu
