@@ -30,3 +30,6 @@ checkpoint/
 # --- IDEs ---
 .vscode/
 .idea/
+
+# Logs da interface
+academic/src/interface/logs/
