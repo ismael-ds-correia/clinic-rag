@@ -103,10 +103,7 @@ with st.sidebar:
     )
 
     st.divider()
-
-    if st.session_state.history:
-        st.metric("Perguntas nesta sessão", len(st.session_state.history))
-        st.divider()
+    
 
     if st.button("🗑️ Limpar conversa", use_container_width=True):
         st.session_state.history = []
