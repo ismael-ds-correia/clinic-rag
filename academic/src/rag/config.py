@@ -32,7 +32,7 @@ OLLAMA_BASE_URL = os.getenv("OLLAMA_BASE_URL", "http://ollama:11434")
 
 # Temperatura mantém-se em 0 para garantir respostas determinísticas
 # sempre de acordo com os documentos.
-LLM_TEMPERATURE = 0
+LLM_TEMPERATURE = 0.2
 LLM_NUM_CTX = int(os.getenv("LLM_NUM_CTX", "8192"))
 LLM_NUM_PREDICT = int(os.getenv("LLM_NUM_PREDICT", "2048"))
 
