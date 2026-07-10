@@ -27,22 +27,6 @@ Este módulo do projeto implementa um pipeline de chunking estrutural para Proto
 
 ## 2. Arquitetura Geral
 
-```mermaid
-    A[Arquivo JSONL de Entrada] --> B[JSONLReader]
-    B --> C[DocumentReconstructor]
-    C --> D[SectionDetector]
-    D --> E[DocumentSections]
-    E --> F[Merge de Seções Pequenas]
-    F --> G[SemanticEnricher - Batch]
-    G --> H[FinalChunkGenerator]
-    H --> I[Arquivo JSONL de Chunks]
-    
-    G --> G1[Extração de Sintagmas Nominais]
-    G --> G2[TextRank Local]
-    G --> G3[IDF Global]
-    G --> G4[Seleção Final]
-```
-
 **Etapas do pipeline:**
 
 1. **Leitura e agrupamento:** Lê arquivo JSONL contendo páginas de documentos e agrupa por fonte

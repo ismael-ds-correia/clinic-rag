@@ -435,3 +435,8 @@ preencher "Tipo de falha"):**
 |    |                    |                |                 |                                                       |                          |
 |    |                    |                |                 |                                                       |                          |
 |    |                    |                |                 |                                                       |                          |
+## 11. Otimização de Chunks
+
+Uma etapa de enriquecimento semântico foi introduzida no fluxo antes da segmentação final em chunks. Esse passo extrai os conceitos-chave de cada seção de forma automatizada, utilizando métodos de identificação de candidatos, ordenação local e filtros de IDF sobre todo o conjunto de documentos. Dessa forma, geramos um grupo de `semantic_entities` associado a cada chunk (mapeando, de forma dinâmica, expressões como *atraso no desenvolvimento neuropsicomotor*, *hiperventilação*, *aminobenzoato como substrato*, *doença hepática*, *quimioluminescência* ou *suspensão do gh*), agregando valor à representação do texto e melhorando o desempenho na recuperação de informações.
+
+Para mais detalhes, ler [README.md](../src/chunking/README.md).
