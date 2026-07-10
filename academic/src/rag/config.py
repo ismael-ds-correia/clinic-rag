@@ -27,7 +27,7 @@ VECTOR_STORE_METADATA_PATH = VECTOR_STORE_DIR / "metadata.jsonl"
 EMBEDDING_MODEL_NAME = os.getenv("EMBEDDING_MODEL_NAME", "bge-m3")
 
 # LLM (Qwen 3.5, servido via Ollama)
-LLM_MODEL_NAME = os.getenv("LLM_MODEL_NAME", "qwen3.5:0.8b")
+LLM_MODEL_NAME = os.getenv("LLM_MODEL_NAME", "qwen3.5:4b")
 OLLAMA_BASE_URL = os.getenv("OLLAMA_BASE_URL", "http://ollama:11434")
 
 # Temperatura mantém-se em 0 para garantir respostas determinísticas
@@ -40,7 +40,7 @@ LLM_NUM_PREDICT = int(os.getenv("LLM_NUM_PREDICT", "2048"))
 RETRIEVAL_TOP_K = int(os.getenv("RETRIEVAL_TOP_K", "5"))
 
 #Número máximo de chunks enviados como contexto.
-MAX_CONTEXT_CHUNKS = int(os.getenv("MAX_CONTEXT_CHUNKS", "10"))
+MAX_CONTEXT_CHUNKS = int(os.getenv("MAX_CONTEXT_CHUNKS", "5"))
 
 # Número máximo de sub-perguntas geradas pela decomposição.
 MAX_SUBQUESTIONS = int(os.getenv("MAX_SUBQUESTIONS", "4"))

@@ -17,7 +17,7 @@ sleep 5
 echo "📥 Verifying and downloading the bge-m3 embedding model (this may take time on the first run)..."
 docker exec ollama ollama pull bge-m3
 
-echo "📥 Verifying and downloading the qwen3.5:0.8b chat model (this may take time on the first run)..."
-docker exec ollama ollama pull qwen3.5:0.8b
+echo "📥 Verifying and downloading the qwen3.5:4b chat model (this may take time on the first run)..."
+docker exec ollama ollama pull qwen3.5:4b
 
 echo "✅ All done! Have fun."
